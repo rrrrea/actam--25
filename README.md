@@ -1,1 +1,3 @@
-# actam--25
+# codec-explorer
+
+Minimal scaffold for the codec exploration project.

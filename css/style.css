@@ -1,0 +1,9 @@
+html,
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+}
+
+.app {
+  padding: 24px;
+}

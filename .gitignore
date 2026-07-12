@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+node_modules/
+dist/
+build/
+data/
+outputs/
+assets/**/*.wav
+assets/**/*.png
+assets/**/*.json
