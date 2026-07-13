@@ -20,20 +20,6 @@
               "icon": "lucide-file",
               "title": "ACTAM"
             }
-          },
-          {
-            "id": "9823d5bb2c2b2a5b",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "README.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "README"
-            }
           }
         ]
       }
@@ -137,6 +123,10 @@
   },
   "active": "5497bd215c005b67",
   "lastOpenFiles": [
+    "README.md",
+    "README-0.md",
+    "README_2.md",
+    "README_副本.md",
     "assets/audio/percussion-underworld_prep_24_0kbps_contrib.wav",
     "assets/audio/percussion-underworld_prep_24_0kbps_residual.wav",
     "assets/audio/percussion-underworld_prep_12_0kbps_contrib.wav",
@@ -147,8 +137,6 @@
     "assets/audio/percussion-underworld_prep_3_0kbps_residual.wav",
     "assets/audio/percussion-underworld_prep_1_5kbps_contrib.wav",
     "assets/audio/percussion-underworld_prep_1_5kbps_residual.wav",
-    "assets/audio/morning_24khz_24_0kbps_contrib.wav",
-    "README.md",
     "assets/spectrograms/percussion-underworld_prep_24_0kbps.png",
     "assets/spectrograms/percussion-underworld_prep_12_0kbps.png",
     "assets/spectrograms/percussion-underworld_prep_6_0kbps.png",
