@@ -11,3 +11,4 @@ outputs/
 assets/**/*.wav
 assets/**/*.png
 assets/**/*.json
+.cache/
