@@ -4,9 +4,9 @@
 
 Live demo: `[https://bianr233.github.io/actam--25/](https://bianr233.github.io/actam--25/)`
 
-!\[screenshot]\(readme\_images.png)&#x20;
+readme\_images.png
 
-Developed for the **Advanced Coding Tools and Methodologies** course (ACTAM 2025/26, Politecnico di Milano). Tested on Chrome; use headphones — most of what this app demonstrates lives in the details.
+Developed for the **Advanced Coding Tools and Methodologies** course (ACTAM). Tested on Chrome.
 
 ## Summary
 
@@ -24,9 +24,11 @@ Developed for the **Advanced Coding Tools and Methodologies** course (ACTAM 2025
 
 Neural audio codecs are trained to compress *human* signals — speech and music — as transparently as possible. This project asks what happens when a compression system built for human sounds encounters non-human ones: birdsong, environmental textures, resonant percussion.
 
-At high bitrates the reconstruction is near-transparent. As the bitrate drops, the codec must describe the signal with fewer discrete symbols, and its failures become audible: smeared attacks, wobbling pitches, phantom harmonics. **residuals** makes this degradation inspectable in three ways — you hear the reconstruction, you hear what was *thrown away*, and you see the entire discrete representation the sound was decoded from.
+At high bitrates the reconstruction is near-transparent. As the bitrate drops, the codec must describe the signal with fewer discrete symbols, and its failures become audible: smeared attacks, wobbling pitches, phantom harmonics.&#x20;
 
-The name is a double reading. In residual vector quantization, the *residual* is the error each codebook layer passes to the next. In the glitch and microsound tradition (Kim Cascone's "aesthetics of failure"), the *residue* of a technical system is musical substance. Here the two meanings collapse into one button: the low-bitrate residual files exported by this project are the source material for an electroacoustic composition.
+**Residuals** makes this degradation inspectable in three ways — you hear the reconstruction, you hear what was *thrown away*, and you see the entire discrete representation the sound was decoded from.
+
+The name is a double reading. In residual vector quantization, the *residual* is the error each codebook layer passes to the next. In the glitch and microsound tradition (Kim Cascone's "aesthetics of failure"), the *residue* of a technical system is musical substance.&#x20;
 
 There is a third reading, looking forward rather than back: EnCodec tokens are the vocabulary of audio language models — MusicGen and VALL-E generate exactly these integers. The artifacts you hear at low bitrates are the resolution limit at which such models perceive sound.
 
