@@ -19,7 +19,7 @@ Live demo: `[https://bianr233.github.io/actam--25/](https://bianr233.github.io/a
 
 Neural audio codecs are trained to compress *human* signals — speech and music — as transparently as possible. This project asks what happens when a compression system built for human sounds encounters non-human ones: field recordings of birds, forests, environmental noise.
 
-At high bitrates the reconstruction is near-transparent. As the bitrate drops, the codec is forced to describe the signal with fewer and fewer discrete symbols, and its failures become audible: smearing, phantom harmonics, texture collapse. Codec Explorer makes this degradation inspectable — you hear the reconstruction, and you simultaneously see the *entire* discrete representation it was decoded from.
+At high bitrates the reconstruction is near-transparent. As the bitrate drops, the codec is forced to describe the signal with fewer and fewer discrete symbols, and its failures become audible: smearing, phantom harmonics, texture collapse. residual makes this degradation inspectable — you hear the reconstruction, and you simultaneously see the *entire* discrete representation it was decoded from.
 
 The same low-bitrate artifacts serve as source material for an electroacoustic composition (in the tradition of Kim Cascone's "aesthetics of failure": glitch and microsound treat the residue of technical systems as musical substance).
 
