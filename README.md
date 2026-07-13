@@ -2,22 +2,23 @@
 
 **Field recordings through a neural audio codec — residual vector quantization as compositional material.**
 
-Live demo: **https://\<username\>.github.io/\<repo\>/** <!-- replace after Pages deploy -->
+Live demo: `[https://bianr233.github.io/actam--25/](https://bianr233.github.io/actam--25/)`
 
-![screenshot](readme_images/screenshot.png) <!-- add a screenshot of the running app -->
+!\[screenshot]\(readme\_images.png)&#x20;
 
 Developed for the **Advanced Coding Tools and Methodologies** course (ACTAM 2025/26, Politecnico di Milano). Tested on Chrome; use headphones — most of what this app demonstrates lives in the details.
 
 ## Summary
-* [Concept](#concept)
-* [Why EnCodec?](#why-encodec)
-* [How residual vector quantization works](#how-residual-vector-quantization-works)
-* [Using the app](#using-the-app)
-* [Sample curation](#sample-curation)
-* [Reading the artifacts](#reading-the-artifacts)
-* [Architecture](#architecture)
-* [Run locally](#run-locally)
-* [Add your own recordings](#add-your-own-recordings)
+
+- [Concept](#concept)
+- [Why EnCodec?](#why-encodec)
+- [How residual vector quantization works](#how-residual-vector-quantization-works)
+- [Using the app](#using-the-app)
+- [Sample curation](#sample-curation)
+- [Reading the artifacts](#reading-the-artifacts)
+- [Architecture](#architecture)
+- [Run locally](#run-locally)
+- [Add your own recordings](#add-your-own-recordings)
 
 ## Concept
 
@@ -62,12 +63,12 @@ Because the quantizer is **nested** — the first *k* codebooks of a 24 kbps enc
 
 The four recordings are not interchangeable — each probes a different failure mode of the codec:
 
-| recording | signal type | what it tests | expected result |
-|---|---|---|---|
-| `attention-male` | speech | the codec's home turf (control) | stable at every bitrate — it was built for this |
-| `percussion-underworld` | dense transients + resonance | temporal resolution (75 frames/s ≈ 13 ms per frame) | smeared attacks, pre-echo at low bitrates |
-| `bird_whistle` | high, clean pitch sweeps | frequency precision — quantization error has nowhere to hide on a pure tone | pitch wobble, phantom partials |
-| `morning` | broadband environmental texture | the masking floor (control) | smallest audible change — noise hides quantization noise |
+| recording               | signal type                     | what it tests                                                               | expected result                                          |
+| ----------------------- | ------------------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `attention-male`        | speech                          | the codec's home turf (control)                                             | stable at every bitrate — it was built for this          |
+| `percussion-underworld` | dense transients + resonance    | temporal resolution (75 frames/s ≈ 13 ms per frame)                         | smeared attacks, pre-echo at low bitrates                |
+| `bird_whistle`          | high, clean pitch sweeps        | frequency precision — quantization error has nowhere to hide on a pure tone | pitch wobble, phantom partials                           |
+| `morning`               | broadband environmental texture | the masking floor (control)                                                 | smallest audible change — noise hides quantization noise |
 
 Read together: degradation speed is not uniform, and its ordering mirrors the codec's training distribution. Speech survives best; transients and pure tones break first; texture gets away with it. That ordering *is* the project's concept, made audible.
 
@@ -75,7 +76,7 @@ Read together: degradation speed is not uniform, and its ordering mirrors the co
 
 A short listener's dictionary, artifact → mechanism:
 
-- **Smeared or softened attacks** (percussion, low bitrates) — one latent frame spans ~13 ms; a drum hit is shorter than the codec's temporal pixel.
+- **Smeared or softened attacks** (percussion, low bitrates) — one latent frame spans \~13 ms; a drum hit is shorter than the codec's temporal pixel.
 - **Pitch wobble and phantom partials** (bird whistle) — with few codebooks, the nearest available code jumps between frames; a clean sweep becomes a staircase with ghosts.
 - **Metallic, granular sheen** (everywhere at 1.5 kbps) — two coarse codebooks per frame force the decoder to hallucinate texture from a tiny vocabulary.
 - **Residual that sounds like a whispering double of the original** — what you are hearing is precisely the information that did not fit; as bitrate rises it thins into hiss, then silence.
@@ -84,7 +85,7 @@ A short listener's dictionary, artifact → mechanism:
 
 Fully static — no backend, no runtime inference. Heavy computation happens once, offline:
 
-```
+```javascript
 scripts/encode.py  (Python, offline)          browser (static)
 ─────────────────────────────────    ────────────────────────────────
 wav → EnCodec encode/decode      →   assets/audio/*.wav            → Web Audio, gain-switched A/B
