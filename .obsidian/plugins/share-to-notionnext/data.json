@@ -1,0 +1,38 @@
+{
+  "NextButton": true,
+  "notionAPINext": "",
+  "databaseIDNext": "",
+  "bannerUrl": "",
+  "notionUser": "",
+  "NotionLinkDisplay": true,
+  "autoCopyNotionLink": true,
+  "autoSync": true,
+  "autoSyncDelay": 5,
+  "autoSyncSuccessNotice": false,
+  "autoSyncFrontmatterKey": "autosync-database",
+  "proxy": "",
+  "GeneralButton": true,
+  "tagButton": true,
+  "customTitleButton": false,
+  "customTitleName": "",
+  "notionAPIGeneral": "",
+  "databaseIDGeneral": "",
+  "CustomButton": false,
+  "CustomValues": "",
+  "notionAPICustom": "",
+  "databaseIDCustom": "",
+  "databaseDetails": {
+    "库": {
+      "format": "general",
+      "fullName": "+题库",
+      "abName": "库",
+      "notionAPI": "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",
+      "databaseID": "https://ribbon-saga-75f.notion.site/355ba820d640809d843dc5e1286c251f?v=355ba820d6408089856b000c041e02cc&source=copy_link",
+      "tagButton": false,
+      "customTitleButton": false,
+      "customTitleName": "",
+      "customProperties": [],
+      "saved": true
+    }
+  }
+}

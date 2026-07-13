@@ -1,65 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>residuals — hearing quantization</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Codec Explorer — hearing quantization</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
-  <header class="masthead">
-    <div>
-      <h1>residuals</h1>
-      <p class="sub">field recordings through EnCodec &middot; residual vector quantization as material</p>
-    </div>
-    <label class="sample-picker">
-      <span>recording</span>
-      <select id="sampleSelect"></select>
-    </label>
-  </header>
+<header class="masthead">
+  <div>
+    <h1>Codec Explorer</h1>
+    <p class="sub">field recordings through EnCodec &middot; residual vector quantization as material</p>
+  </div>
+  <label class="sample-picker">
+    <span>recording</span>
+    <select id="sampleSelect"></select>
+  </label>
+</header>
 
-  <section class="transport">
-    <button id="playBtn" class="play" disabled>load&hellip;</button>
-    <div class="ladder" id="ladder" role="radiogroup" aria-label="bitrate"></div>
-    <div class="readout">
-      <span id="readoutKbps">&mdash;</span>
-      <span id="readoutNq" class="dim">&mdash;</span>
-    </div>
-  </section>
+<section class="transport">
+  <button id="playBtn" class="play" disabled>load&hellip;</button>
+  <button id="residBtn" class="resid" aria-pressed="false" title="hear what the codec threw away">residual</button>
+  <div class="ladder" id="ladder" role="radiogroup" aria-label="bitrate"></div>
+  <div class="readout">
+    <span id="readoutKbps">&mdash;</span>
+    <span id="readoutNq" class="dim">&mdash;</span>
+  </div>
+</section>
 
-  <section class="specs">
-    <figure>
-      <figcaption>original &middot; 24 kHz</figcaption>
-      <img id="specOriginal" alt="mel spectrogram of the original recording">
-    </figure>
-    <figure>
-      <figcaption id="specReconCap">reconstruction</figcaption>
-      <img id="specRecon" alt="mel spectrogram of the reconstruction">
-    </figure>
-  </section>
+<section class="specs">
+  <figure>
+    <figcaption>original &middot; 24 kHz</figcaption>
+    <img id="specOriginal" alt="mel spectrogram of the original recording">
+  </figure>
+  <figure>
+    <figcaption id="specReconCap">reconstruction</figcaption>
+    <img id="specRecon" alt="mel spectrogram of the reconstruction">
+  </figure>
+</section>
 
-  <section class="tokens">
-    <div class="tokens-head">
-      <h2>token grid</h2>
-      <p class="dim" id="tokensNote">every integer below is the entire signal at this bitrate</p>
-    </div>
-    <canvas id="tokenCanvas" height="220"></canvas>
-    <div class="axis"><span>0 s</span><span id="axisEnd">&mdash;</span></div>
-  </section>
+<section class="tokens">
+  <div class="tokens-head">
+    <h2>token grid</h2>
+    <p class="dim" id="tokensNote">every integer below is the entire signal at this bitrate</p>
+  </div>
+  <canvas id="tokenCanvas" height="220"></canvas>
+  <div class="axis"><span>0 s</span><span id="axisEnd">&mdash;</span></div>
+</section>
 
-  <footer>
-    <p>ACTAM 2025/26 &middot; tokens are indices into 1024-entry codebooks, 75 frames per second.
-      Fewer layers &rarr; larger residual &rarr; the artifacts you hear.</p>
-  </footer>
+<footer>
+  <p>space = instant A/B against the original &middot; residual = original &minus; reconstruction, the discarded part of the signal.</p>
+  <p>ACTAM 2025/26 &middot; tokens are indices into 1024-entry codebooks, 75 frames per second.
+     Fewer layers &rarr; larger residual &rarr; the artifacts you hear.</p>
+</footer>
 
-  <script src="js/main.js"></script>
+<script src="js/main.js"></script>
 </body>
-
 </html>

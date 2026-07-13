@@ -1,0 +1,17 @@
+{
+  "targetLanguage": {
+    "text": "Chinese Simplified",
+    "code": "zh-Hans"
+  },
+  "apiType": {
+    "text": "LibreTranslate",
+    "value": "2"
+  },
+  "translateApiUrl": "http://127.0.0.1:8045/v1",
+  "maxCharacters": 2000,
+  "token": "",
+  "region": {
+    "text": "Global",
+    "code": "global"
+  }
+}

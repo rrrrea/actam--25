@@ -47,6 +47,15 @@ button.play{
 button.play[disabled]{opacity:.45;cursor:wait}
 button.play:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 
+button.resid{
+  font:inherit;font-size:.78rem;cursor:pointer;
+  background:transparent;color:var(--dim);
+  border:1px dashed var(--grid);border-radius:var(--radius);
+  padding:.45rem .7rem;
+}
+button.resid[aria-pressed="true"]{color:var(--signal);border-color:var(--signal);border-style:solid}
+button.resid:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+
 .ladder{display:flex;gap:.35rem;flex-wrap:wrap}
 .ladder button{
   font:inherit;font-size:.78rem;cursor:pointer;

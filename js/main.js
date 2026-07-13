@@ -20,6 +20,8 @@ const state = {
   variants: {},      // key -> {buffer, gain, source}
   tokens: {},        // key -> codes[][]
   current: "original",
+  lastBitrate: null,   // last non-original key, target of spacebar A/B
+  residual: false,     // when true, audition original - reconstruction
   playing: false,
   startedAt: 0,
   duration: 0,
@@ -38,6 +40,18 @@ async function boot() {
 
   buildLadder();
   el("playBtn").onclick = togglePlay;
+  el("residBtn").onclick = () => {
+    state.residual = !state.residual;
+    el("residBtn").setAttribute("aria-pressed", state.residual);
+    applyGains();
+    selectVariant(state.current); // refresh readout
+  };
+  window.addEventListener("keydown", e => {
+    if (e.code !== "Space" || e.target.tagName === "SELECT") return;
+    e.preventDefault();
+    if (state.current === "original" && state.lastBitrate) selectVariant(state.lastBitrate);
+    else if (state.current !== "original") selectVariant("original");
+  });
   await loadSample(manifest.samples[0]);
 }
 
@@ -74,6 +88,7 @@ async function loadSample(stem) {
   for (const br of state.bitrates) {
     const key = tag(stem, br).slice(stem.length + 1); // e.g. "1_5kbps"
     jobs.push(fetchBuffer(`assets/audio/${tag(stem, br)}.wav`, key));
+    jobs.push(fetchBuffer(`assets/audio/${tag(stem, br)}_residual.wav`, key + "_res").catch(() => {}));
     jobs.push(
       fetch(`assets/tokens/${tag(stem, br)}.json`)
         .then(r => r.json())
@@ -99,15 +114,31 @@ async function fetchBuffer(url, key) {
 
 /* ---------- playback: simultaneous sources, gain switching ---------- */
 
+function audibleKey() {
+  if (state.residual && state.current !== "original" && state.variants[state.current + "_res"])
+    return state.current + "_res";
+  return state.current;
+}
+
+function applyGains() {
+  if (!state.playing) return;
+  const now = state.ctx.currentTime, target = audibleKey();
+  for (const [k, v] of Object.entries(state.variants)) {
+    if (!v.gain) continue;
+    v.gain.gain.setTargetAtTime(k === target ? 1 : 0, now, 0.008); // click-free
+  }
+}
+
 function startPlayback() {
   const ctx = state.ctx;
   if (ctx.state === "suspended") ctx.resume();
   const t0 = ctx.currentTime + 0.05;
+  const target = audibleKey();
   for (const [key, v] of Object.entries(state.variants)) {
     const src = ctx.createBufferSource();
     src.buffer = v.buffer;
     const g = ctx.createGain();
-    g.gain.value = key === state.current ? 1 : 0;
+    g.gain.value = key === target ? 1 : 0;
     src.connect(g).connect(ctx.destination);
     src.start(t0);
     v.source = src; v.gain = g;
@@ -134,15 +165,10 @@ function togglePlay() { state.playing ? stopPlayback() : startPlayback(); }
 
 function selectVariant(key) {
   state.current = key;
+  if (key !== "original") state.lastBitrate = key;
   document.querySelectorAll(".ladder button").forEach(b =>
     b.setAttribute("aria-checked", b.dataset.key === key));
-  if (state.playing) {
-    const now = state.ctx.currentTime;
-    for (const [k, v] of Object.entries(state.variants)) {
-      if (!v.gain) continue;
-      v.gain.gain.setTargetAtTime(k === key ? 1 : 0, now, 0.008); // click-free
-    }
-  }
+  applyGains();
   // readout + spectrogram + tokens
   if (key === "original") {
     el("readoutKbps").textContent = "reference";
@@ -152,7 +178,8 @@ function selectVariant(key) {
     el("tokensNote").textContent = "select a bitrate to see its discrete representation";
   } else {
     const j = state.tokens[key];
-    el("readoutKbps").textContent = j ? `${j.kbps} kbps` : key;
+    const res = state.residual ? " \u00b7 residual" : "";
+    el("readoutKbps").textContent = (j ? `${j.kbps} kbps` : key) + res;
     el("readoutNq").textContent = j ? `${j.n_q} codebook layers \u00d7 ${j.n_frames} frames` : "";
     el("specRecon").src = `assets/spectrograms/${state.stem}_${key}.png`;
     el("specReconCap").textContent = j ? `reconstruction \u00b7 ${j.kbps} kbps` : "reconstruction";
