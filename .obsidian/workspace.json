@@ -35,8 +35,7 @@
               "title": "README"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -110,13 +109,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "README.md",
+                "file": "ACTAM.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "README 的大纲"
+              "title": "ACTAM 的大纲"
             }
           }
         ]
@@ -136,19 +135,20 @@
       "bases:新建数据库": false
     }
   },
-  "active": "9823d5bb2c2b2a5b",
+  "active": "5497bd215c005b67",
   "lastOpenFiles": [
-    "assets/audio/morning_24khz_24_0kbps.wav",
-    "assets/audio/morning_24khz_12_0kbps.wav",
-    "assets/audio/morning_24khz_6_0kbps.wav",
-    "assets/audio/morning_24khz_3_0kbps.wav",
-    "assets/audio/morning_24khz_1_5kbps.wav",
-    "assets/audio/morning_24khz_original.wav",
-    "assets/audio/bird_whistle_24_0kbps.wav",
-    "assets/audio/bird_whistle_12_0kbps.wav",
-    "assets/audio/bird_whistle_6_0kbps.wav",
-    "assets/audio/bird_whistle_3_0kbps.wav",
-    "assets/audio/bird_whistle_1_5kbps.wav",
+    "assets/audio/percussion-underworld_prep_24_0kbps_contrib.wav",
+    "assets/audio/percussion-underworld_prep_24_0kbps_residual.wav",
+    "assets/audio/percussion-underworld_prep_12_0kbps_contrib.wav",
+    "assets/audio/percussion-underworld_prep_12_0kbps_residual.wav",
+    "assets/audio/percussion-underworld_prep_6_0kbps_contrib.wav",
+    "assets/audio/percussion-underworld_prep_6_0kbps_residual.wav",
+    "assets/audio/percussion-underworld_prep_3_0kbps_contrib.wav",
+    "assets/audio/percussion-underworld_prep_3_0kbps_residual.wav",
+    "assets/audio/percussion-underworld_prep_1_5kbps_contrib.wav",
+    "assets/audio/percussion-underworld_prep_1_5kbps_residual.wav",
+    "assets/audio/morning_24khz_24_0kbps_contrib.wav",
+    "README.md",
     "assets/spectrograms/percussion-underworld_prep_24_0kbps.png",
     "assets/spectrograms/percussion-underworld_prep_12_0kbps.png",
     "assets/spectrograms/percussion-underworld_prep_6_0kbps.png",
