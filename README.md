@@ -1,10 +1,10 @@
-# Codec Explorer
+# residuals
 
 **Field recordings through a neural audio codec — residual vector quantization as compositional material.**
 
-Live demo: `https://<username>.github.io/<repo>/` <!-- replace after Pages deploy -->
+Live demo: `[https://bianr233.github.io/actam--25/](https://bianr233.github.io/actam--25/)`  
 
-![screenshot](readme_images/screenshot.png) <!-- add a screenshot of the running app -->
+![screenshot](readme_images.png)
 
 ## Summary
 * [Concept](#concept)
