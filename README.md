@@ -11,7 +11,7 @@ Developed for the **Advanced Coding Tools and Methodologies** course (ACTAM). Te
 ## Summary
 
 - [Concept](#concept)
-- [Why EnCodec?](#why-encodec)
+- [EnCodec?](#encodec)
 - [How residual vector quantization works](#how-residual-vector-quantization-works)
 - [Using the app](#using-the-app)
 - [Sample curation](#sample-curation)
