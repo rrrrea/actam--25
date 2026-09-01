@@ -25,6 +25,7 @@ const state = {
   playing: false,
   startedAt: 0,
   duration: 0,
+  autoCycleTimer: null,
 };
 
 /* ---------- boot ---------- */
@@ -47,15 +48,38 @@ async function boot() {
     applyGains();
     selectVariant(state.current); // refresh readout
   };
-  el("residBtn").onclick = () => setMode("residual");
-  el("contribBtn").onclick = () => setMode("contrib");
+  el("residBtn").onclick = () => { stopAutoCycle(); setMode("residual"); };
+  el("contribBtn").onclick = () => { stopAutoCycle(); setMode("contrib"); };
+  sel.addEventListener("change", stopAutoCycle);
   window.addEventListener("keydown", e => {
     if (e.code !== "Space" || e.target.tagName === "SELECT") return;
     e.preventDefault();
+    stopAutoCycle();
     if (state.current === "original" && state.lastBitrate) selectVariant(state.lastBitrate);
     else if (state.current !== "original") selectVariant("original");
   });
   await loadSample(manifest.samples[0]);
+  startAutoCycle();
+}
+
+/* ---------- auto-cycle: silent visual demo until the user takes over ---------- */
+
+function startAutoCycle() {
+  if (state.autoCycleTimer) return;
+  const keys = () => state.bitrates.map(br => tag(state.stem, br).slice(state.stem.length + 1));
+  let i = 0;
+  state.autoCycleTimer = setInterval(() => {
+    const ks = keys();
+    i = (i + 1) % ks.length;
+    selectVariant(ks[i]); // visual only: applyGains no-ops while not playing
+  }, 1800);
+}
+
+function stopAutoCycle() {
+  if (!state.autoCycleTimer) return;
+  clearInterval(state.autoCycleTimer);
+  state.autoCycleTimer = null;
+  el("autoTag").classList.add("hidden");
 }
 
 function buildLadder() {
@@ -66,7 +90,7 @@ function buildLadder() {
     b.setAttribute("role", "radio");
     b.setAttribute("aria-checked", key === state.current);
     b.innerHTML = `${label}<small>${small}</small>`;
-    b.onclick = () => selectVariant(key);
+    b.onclick = () => { stopAutoCycle(); selectVariant(key); };
     b.dataset.key = key;
     ladder.appendChild(b);
   };
@@ -171,6 +195,7 @@ function stopPlayback() {
 function togglePlay() {
   el("playBtn").classList.remove("invite");
   el("hint").classList.add("hidden");
+  stopAutoCycle();
   state.playing ? stopPlayback() : startPlayback();
 }
 

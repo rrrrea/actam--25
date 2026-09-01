@@ -131,7 +131,21 @@ button.play.invite{animation:invite-pulse 1.8s ease-in-out infinite}
 }
 .hint.hidden{display:none}
 
+.auto-tag{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-size:.62rem;font-weight:400;text-transform:none;
+  color:var(--signal);opacity:.85;margin-left:.6rem;letter-spacing:.02em;
+  vertical-align:middle;
+}
+.auto-tag::before{
+  content:"";width:.4rem;height:.4rem;border-radius:50%;
+  background:var(--signal);animation:blink 1.4s ease-in-out infinite;
+}
+.auto-tag.hidden{display:none}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important}
   button.play.invite{animation:none}
+  .auto-tag::before{animation:none}
 }
