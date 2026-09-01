@@ -12,8 +12,7 @@ Developed for the **Advanced Coding Tools and Methodologies** course (ACTAM). Te
 
 - [Concept](#concept)
 - [EnCodec?](#encodec)
-- [How residual vector quantization works](#how-residual-vector-quantization-works)
-- [Using the app](#using-the-app)
+- [Residual vector quantization](#residual-vector-quantization)
 - [Sample curation](#sample-curation)
 - [Reading the artifacts](#reading-the-artifacts)
 - [Architecture](#architecture)
