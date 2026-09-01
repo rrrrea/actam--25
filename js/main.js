@@ -108,6 +108,7 @@ async function loadSample(stem) {
   selectVariant(state.current === "original" ? tag(stem, state.bitrates[0]).slice(stem.length + 1) : state.current);
   el("playBtn").disabled = false;
   el("playBtn").textContent = "play";
+  el("playBtn").classList.add("invite");
 }
 
 async function fetchBuffer(url, key) {
@@ -167,7 +168,11 @@ function stopPlayback() {
   drawTokens(); // clear playhead
 }
 
-function togglePlay() { state.playing ? stopPlayback() : startPlayback(); }
+function togglePlay() {
+  el("playBtn").classList.remove("invite");
+  el("hint").classList.add("hidden");
+  state.playing ? stopPlayback() : startPlayback();
+}
 
 function selectVariant(key) {
   state.current = key;
@@ -215,7 +220,7 @@ function drawTokens() {
 
   const j = state.tokens[state.current];
   if (!j) {
-    ctx2.fillStyle = "#6d7169";
+    ctx2.fillStyle = "#7d8590";
     ctx2.font = `${12 * devicePixelRatio}px IBM Plex Mono, monospace`;
     ctx2.fillText("original — continuous signal, no tokens", 12 * devicePixelRatio, 24 * devicePixelRatio);
     return;
