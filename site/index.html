@@ -21,8 +21,11 @@
   </label>
 </header>
 
+<p class="hint" id="hint">this recording is already showing its most degraded state below \u2014 press play to hear it</p>
 <section class="transport">
   <button id="playBtn" class="play" disabled>load&hellip;</button>
+  <button id="residBtn" class="resid" aria-pressed="false" title="hear what the codec threw away">residual</button>
+  <button id="contribBtn" class="resid" aria-pressed="false" title="hear what the added codebook layers contribute at this step">layers</button>
   <div class="ladder" id="ladder" role="radiogroup" aria-label="bitrate"></div>
   <div class="readout">
     <span id="readoutKbps">&mdash;</span>
@@ -51,6 +54,7 @@
 </section>
 
 <footer>
+  <p>space = instant A/B against the original &middot; residual = what the codec threw away &middot; layers = what the codebooks added at this step (RVQ is nested: each bitrate refines the previous one).</p>
   <p>ACTAM 2025/26 &middot; tokens are indices into 1024-entry codebooks, 75 frames per second.
      Fewer layers &rarr; larger residual &rarr; the artifacts you hear.</p>
 </footer>

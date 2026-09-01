@@ -45,6 +45,7 @@ def process(path):
     mel_png(orig_np, sr, f"{OUT['spec']}/{stem}_original.png", f"{stem} original")
 
     wav_b = wav.unsqueeze(0)  # [B,C,T]
+    prev_recon = None
     for br in BITRATES:
         model.set_target_bandwidth(br)
         with torch.no_grad():
@@ -54,6 +55,18 @@ def process(path):
         tag = f"{stem}_{br}kbps".replace(".", "_")
         recon_np = recon.squeeze(0).cpu().numpy()
         sf.write(f"{OUT['audio']}/{tag}.wav", recon_np, sr)
+
+        # residual: what the codec threw away (time-aligned subtraction)
+        L = min(len(orig_np), len(recon_np))
+        resid = orig_np[:L] - recon_np[:L]
+        sf.write(f"{OUT['audio']}/{tag}_residual.wav", resid, sr)
+
+        # contribution: what the layers added at this step vs the previous bitrate
+        # (RVQ is nested, so recon(b) - recon(b_prev) = sound of the added codebooks;
+        #  for the first bitrate the contribution IS the foundation reconstruction)
+        contrib = recon_np if prev_recon is None else recon_np[:min(len(recon_np), len(prev_recon))] - prev_recon[:min(len(recon_np), len(prev_recon))]
+        sf.write(f"{OUT['audio']}/{tag}_contrib.wav", contrib, sr)
+        prev_recon = recon_np
         mel_png(recon_np, sr, f"{OUT['spec']}/{tag}.png", f"{stem} {br} kbps")
 
         c = codes.squeeze(0).cpu().numpy()  # [n_q, T_frames]

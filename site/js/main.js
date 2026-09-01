@@ -20,6 +20,8 @@ const state = {
   variants: {},      // key -> {buffer, gain, source}
   tokens: {},        // key -> codes[][]
   current: "original",
+  lastBitrate: null,   // last non-original key, target of spacebar A/B
+  mode: "recon",       // 'recon' | 'residual' | 'contrib'
   playing: false,
   startedAt: 0,
   duration: 0,
@@ -38,6 +40,21 @@ async function boot() {
 
   buildLadder();
   el("playBtn").onclick = togglePlay;
+  const setMode = m => {
+    state.mode = state.mode === m ? "recon" : m;
+    el("residBtn").setAttribute("aria-pressed", state.mode === "residual");
+    el("contribBtn").setAttribute("aria-pressed", state.mode === "contrib");
+    applyGains();
+    selectVariant(state.current); // refresh readout
+  };
+  el("residBtn").onclick = () => setMode("residual");
+  el("contribBtn").onclick = () => setMode("contrib");
+  window.addEventListener("keydown", e => {
+    if (e.code !== "Space" || e.target.tagName === "SELECT") return;
+    e.preventDefault();
+    if (state.current === "original" && state.lastBitrate) selectVariant(state.lastBitrate);
+    else if (state.current !== "original") selectVariant("original");
+  });
   await loadSample(manifest.samples[0]);
 }
 
@@ -74,6 +91,8 @@ async function loadSample(stem) {
   for (const br of state.bitrates) {
     const key = tag(stem, br).slice(stem.length + 1); // e.g. "1_5kbps"
     jobs.push(fetchBuffer(`assets/audio/${tag(stem, br)}.wav`, key));
+    jobs.push(fetchBuffer(`assets/audio/${tag(stem, br)}_residual.wav`, key + "_res").catch(() => {}));
+    jobs.push(fetchBuffer(`assets/audio/${tag(stem, br)}_contrib.wav`, key + "_ctb").catch(() => {}));
     jobs.push(
       fetch(`assets/tokens/${tag(stem, br)}.json`)
         .then(r => r.json())
@@ -89,6 +108,7 @@ async function loadSample(stem) {
   selectVariant(state.current === "original" ? tag(stem, state.bitrates[0]).slice(stem.length + 1) : state.current);
   el("playBtn").disabled = false;
   el("playBtn").textContent = "play";
+  el("playBtn").classList.add("invite");
 }
 
 async function fetchBuffer(url, key) {
@@ -99,15 +119,33 @@ async function fetchBuffer(url, key) {
 
 /* ---------- playback: simultaneous sources, gain switching ---------- */
 
+function audibleKey() {
+  if (state.current !== "original") {
+    if (state.mode === "residual" && state.variants[state.current + "_res"]) return state.current + "_res";
+    if (state.mode === "contrib" && state.variants[state.current + "_ctb"]) return state.current + "_ctb";
+  }
+  return state.current;
+}
+
+function applyGains() {
+  if (!state.playing) return;
+  const now = state.ctx.currentTime, target = audibleKey();
+  for (const [k, v] of Object.entries(state.variants)) {
+    if (!v.gain) continue;
+    v.gain.gain.setTargetAtTime(k === target ? 1 : 0, now, 0.008); // click-free
+  }
+}
+
 function startPlayback() {
   const ctx = state.ctx;
   if (ctx.state === "suspended") ctx.resume();
   const t0 = ctx.currentTime + 0.05;
+  const target = audibleKey();
   for (const [key, v] of Object.entries(state.variants)) {
     const src = ctx.createBufferSource();
     src.buffer = v.buffer;
     const g = ctx.createGain();
-    g.gain.value = key === state.current ? 1 : 0;
+    g.gain.value = key === target ? 1 : 0;
     src.connect(g).connect(ctx.destination);
     src.start(t0);
     v.source = src; v.gain = g;
@@ -130,19 +168,18 @@ function stopPlayback() {
   drawTokens(); // clear playhead
 }
 
-function togglePlay() { state.playing ? stopPlayback() : startPlayback(); }
+function togglePlay() {
+  el("playBtn").classList.remove("invite");
+  el("hint").classList.add("hidden");
+  state.playing ? stopPlayback() : startPlayback();
+}
 
 function selectVariant(key) {
   state.current = key;
+  if (key !== "original") state.lastBitrate = key;
   document.querySelectorAll(".ladder button").forEach(b =>
     b.setAttribute("aria-checked", b.dataset.key === key));
-  if (state.playing) {
-    const now = state.ctx.currentTime;
-    for (const [k, v] of Object.entries(state.variants)) {
-      if (!v.gain) continue;
-      v.gain.gain.setTargetAtTime(k === key ? 1 : 0, now, 0.008); // click-free
-    }
-  }
+  applyGains();
   // readout + spectrogram + tokens
   if (key === "original") {
     el("readoutKbps").textContent = "reference";
@@ -152,7 +189,8 @@ function selectVariant(key) {
     el("tokensNote").textContent = "select a bitrate to see its discrete representation";
   } else {
     const j = state.tokens[key];
-    el("readoutKbps").textContent = j ? `${j.kbps} kbps` : key;
+    const res = state.mode === "residual" ? " \u00b7 residual" : state.mode === "contrib" ? " \u00b7 layer contribution" : "";
+    el("readoutKbps").textContent = (j ? `${j.kbps} kbps` : key) + res;
     el("readoutNq").textContent = j ? `${j.n_q} codebook layers \u00d7 ${j.n_frames} frames` : "";
     el("specRecon").src = `assets/spectrograms/${state.stem}_${key}.png`;
     el("specReconCap").textContent = j ? `reconstruction \u00b7 ${j.kbps} kbps` : "reconstruction";
@@ -182,7 +220,7 @@ function drawTokens() {
 
   const j = state.tokens[state.current];
   if (!j) {
-    ctx2.fillStyle = "#6d7169";
+    ctx2.fillStyle = "#7d8590";
     ctx2.font = `${12 * devicePixelRatio}px IBM Plex Mono, monospace`;
     ctx2.fillText("original — continuous signal, no tokens", 12 * devicePixelRatio, 24 * devicePixelRatio);
     return;
@@ -211,4 +249,17 @@ function drawPlayhead() {
 }
 
 window.addEventListener("resize", drawTokens);
+
+// hover readout: which integer is under the cursor
+el("tokenCanvas").addEventListener("mousemove", e => {
+  const j = state.tokens[state.current];
+  if (!j) return;
+  const r = e.target.getBoundingClientRect();
+  const t = Math.min(j.n_frames - 1, Math.max(0, Math.floor((e.clientX - r.left) / r.width * j.n_frames)));
+  const q = Math.min(j.n_q - 1, Math.max(0, Math.floor((e.clientY - r.top) / r.height * j.n_q)));
+  el("tokensNote").textContent =
+    `layer ${q + 1}/${j.n_q} \u00b7 frame ${t} (${(t / 75).toFixed(2)} s) \u00b7 token #${j.codes[q][t]}`;
+});
+el("tokenCanvas").addEventListener("mouseleave", () => selectVariant(state.current));
+
 boot();
