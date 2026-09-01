@@ -32,16 +32,16 @@ The name is a double reading. In residual vector quantization, the *residual* is
 
 There is a third reading, looking forward rather than back: EnCodec tokens are the vocabulary of audio language models — MusicGen and VALL-E generate exactly these integers. The artifacts you hear at low bitrates are the resolution limit at which such models perceive sound.
 
-## Why EnCodec?
+## EnCodec
 
 [EnCodec](https://github.com/facebookresearch/encodec) (Meta, 2022) is a neural audio codec with an Encoder → RVQ → Decoder architecture. Two reasons it anchors this project:
 
-1. **Its artifacts are musically interesting.** Compared to more recent codecs, EnCodec degrades earlier and more dramatically at low bitrates — which is exactly the material this project is after.
+1. Its artifacts are musically interesting. Compared to more recent codecs, **EnCodec degrades earlier and more dramatically at low bitrates** — which is exactly the material this project is after.
 2. **It is a tokenizer, not just a codec.** Its discrete codes are what audio language models read and write; exploring them is exploring how those models hear.
 
 The 24 kHz mono variant is used at five bandwidth settings: 1.5, 3, 6, 12, 24 kbps.
 
-## How residual vector quantization works
+## Residual vector quantization&#x20;
 
 The encoder maps 24,000 samples per second down to **75 latent frames per second**. Each frame is a continuous vector that must become discrete. RVQ does this in layers:
 
@@ -53,13 +53,13 @@ A 10-second recording at 1.5 kbps is therefore an integer matrix of shape `[2 ×
 
 Because the quantizer is **nested** — the first *k* codebooks of a 24 kbps encoding *are* the k-layer encoding — the bitrate ladder in this app is literally a tour up the RVQ stack.
 
-## Using the app
+## Using&#x20;
 
 - **play** starts all variants of the current recording simultaneously; the bitrate keys just re-route which one you hear, so every comparison is perfectly time-aligned and click-free.
 - **spacebar** — instant A/B between the original and the current bitrate. The fastest way to hear a difference.
 - **residual** — hear `original − reconstruction`: the part of the signal the codec threw away. Loud and textured at 1.5 kbps, near silence at 24.
 - **layers** — hear what each step up the ladder *adds*: 1.5k plays the two-codebook foundation, 3k plays only what layers 3–4 contribute, and so on up to the airy final corrections of layers 17–32. Pressed in order, this is the RVQ algorithm as a listening experience.
-- **token grid** — every colored cell is one integer. Hover to read its layer, frame, time and value; the red playhead shows which column you are hearing.
+- **token grid** — every colored cell is one integer. Hover to read its layer, frame, time and value; the red playhead shows which column you are hearing.&#x20;
 
 ## Sample curation
 
