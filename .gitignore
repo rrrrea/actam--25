@@ -8,8 +8,5 @@ dist/
 build/
 data/
 outputs/
-assets/**/*.wav
-assets/**/*.png
 ACTAM.md
-assets/**/*.json
 .cache/
