@@ -2,7 +2,7 @@
 
 **Field recordings through a neural audio codec — residual vector quantization as compositional material.**
 
-Live demo: `[https://bianr233.github.io/actam--25/](https://rrrrea.github.io/actam--25/))`
+Live demo: `https://rrrrea.github.io/actam--25/`
 
 readme\_images.png
 
